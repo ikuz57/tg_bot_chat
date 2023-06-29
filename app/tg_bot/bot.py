@@ -144,18 +144,19 @@ async def add_user(message: types.Message, command: filters.CommandObject):
             data = []
         for user in data:
             if user['username'] == user_to_add:
-                user['active'] = True  
+                user['active'] = True
                 notfound_flag = False
                 await bot.send_message(
                     user['user_id'],
                     text="Вам предоставлен доступ!"
                 )
         if notfound_flag:
+            await message.answer('Такого пользователя не существует')
             logging.debug('wow wow')
-            message.answer('Такого пользователя не существует')
-        with open('./users.json', 'w+') as file:
-            json.dump(data, file)
-        await message.answer('Пользователь добавлен!')
+        else:
+            with open('./users.json', 'w+') as file:
+                json.dump(data, file)
+            await message.answer('Пользователь добавлен!')
     else:
         await message.answer('У вас нет доступа!')
 
